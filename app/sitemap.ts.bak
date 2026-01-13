@@ -1,0 +1,45 @@
+import { MetadataRoute } from 'next';
+import { routes, services } from '@/lib/data';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+    const baseUrl = 'https://umrahtaxi.com';
+
+    // Static routes
+    const staticRoutes = [
+        '',
+        '/about',
+        '/fleet',
+        '/pricing',
+        '/contact',
+        '/faq',
+        '/booking',
+        '/services',
+        '/routes',
+        '/privacy-policy',
+        '/terms-conditions',
+        '/refund-policy',
+    ].map((route) => ({
+        url: `${baseUrl}${route}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: route === '' ? 1 : 0.8,
+    }));
+
+    // Dynamic routes for routes
+    const dynamicRoutes = routes.map((route: any) => ({
+        url: `${baseUrl}/routes/${route.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+    }));
+
+    // Dynamic routes for services
+    const dynamicServices = services.map((service: any) => ({
+        url: `${baseUrl}/services/${service.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+    }));
+
+    return [...staticRoutes, ...dynamicRoutes, ...dynamicServices];
+}
